@@ -12,6 +12,12 @@ public class PlayerMovement : MonoBehaviour
     private PlayerInput playerInput;
     private Rigidbody rb;
 
+    [Header("Player Variables")]
+    [SerializeField] private float m_fJumpForce = 7.0f;
+    [SerializeField] private float m_fmoveSpeed = 15.0f;
+
+    [SerializeField] private Vector2 m_moveInputVector = Vector2.zero;
+    
     [SerializeField]
     private bool isActive = false;
 
@@ -28,6 +34,11 @@ public class PlayerMovement : MonoBehaviour
         playerInputControls.Player.Enable();
         playerInputControls.Player.Move.performed += OnMove;
         playerInputControls.Player.Move.canceled += OnMove;
+
+        if (!GameManager.Instance.cursorActive)
+        {
+            AppEvents.InvokeOnMouseCursorEnable(false);
+        }
     }
     private void OnEnable()
     {
@@ -52,11 +63,19 @@ public class PlayerMovement : MonoBehaviour
     {
     }
 
+    /// <summary>
+    /// MoveUpdate
+    /// </summary>
+    private void FixedUpdate()
+    {
+        
+    }
+
     public void OnMove(InputAction.CallbackContext obj)
     {
-        Vector2 moveVector = obj.ReadValue<Vector2>();
+        m_moveInputVector = obj.ReadValue<Vector2>();
 
-        Debug.Log(moveVector);
+        Debug.Log(m_moveInputVector);
     }
 
     public void OnLook(InputAction.CallbackContext obj)
