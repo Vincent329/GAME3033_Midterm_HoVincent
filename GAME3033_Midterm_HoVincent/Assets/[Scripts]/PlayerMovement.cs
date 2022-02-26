@@ -17,16 +17,24 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float m_fmoveSpeed = 15.0f;
 
     [SerializeField] private Vector2 m_moveInputVector = Vector2.zero;
+    [SerializeField] private Vector3 m_ForceVector = Vector3.zero; // different so that we get the force applied to the character in world space
     [SerializeField] private Transform checkGroundRay;
 
     /// <summary>
     /// Initializer
     /// </summary>
-    
+
     [Header("States")]
     [SerializeField]
     private bool isActive = false;
+    private bool pause = false;
     [SerializeField] private bool isGrounded;
+
+    // Animator Hashes
+    public readonly int movementXHash = Animator.StringToHash("MovementX");
+    public readonly int movementYHash = Animator.StringToHash("MovementY");
+    public readonly int isJumpingHash = Animator.StringToHash("isJumping");
+    public readonly int isFiringHash = Animator.StringToHash("isFiring");
 
     private void Awake()
     {
@@ -42,20 +50,26 @@ public class PlayerMovement : MonoBehaviour
         playerInputControls.Player.Enable();
         playerInputControls.Player.Move.performed += OnMove;
         playerInputControls.Player.Move.canceled += OnMove;
+        playerInputControls.Player.Fire.started += OnFire;
+        playerInputControls.Player.Jump.started += OnJump;
+        playerInputControls.Player.Pause.started += OnPause;
 
         if (!GameManager.Instance.cursorActive)
         {
-            AppEvents.InvokeOnMouseCursorEnable(false);
+            AppEvents.InvokeOnPauseEvent(false);
         }
     }
     private void OnEnable()
     {
         if (isActive)
         {
-            Debug.Log("BIND DAMMIT");
             playerInputControls.Player.Move.Enable();
             playerInputControls.Player.Move.performed += OnMove;
             playerInputControls.Player.Move.canceled += OnMove;
+            playerInputControls.Player.Fire.started += OnFire;
+            playerInputControls.Player.Jump.started += OnJump;
+            playerInputControls.Player.Pause.started += OnPause;
+
         }
     }
 
@@ -64,11 +78,16 @@ public class PlayerMovement : MonoBehaviour
         playerInputControls.Player.Move.Disable();
         playerInputControls.Player.Move.performed -= OnMove;
         playerInputControls.Player.Move.canceled -= OnMove;
+        playerInputControls.Player.Fire.started -= OnFire;
+        playerInputControls.Player.Jump.started -= OnJump;
+        playerInputControls.Player.Pause.started -= OnPause;
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (m_moveInputVector.magnitude > 0) m_moveInputVector = Vector2.zero;
     }
 
     /// <summary>
@@ -82,18 +101,27 @@ public class PlayerMovement : MonoBehaviour
     public void OnMove(InputAction.CallbackContext obj)
     {
         m_moveInputVector = obj.ReadValue<Vector2>();
-
-        Debug.Log(m_moveInputVector);
     }
 
     public void OnLook(InputAction.CallbackContext obj)
     {
-         
     }
 
     public void OnFire(InputAction.CallbackContext obj)
     {
+        Debug.Log("Shoot some shit");
+    }
 
+    public void OnJump(InputAction.CallbackContext obj)
+    {
+        Debug.Log("Jump");
+
+    }
+    public void OnPause(InputAction.CallbackContext obj)
+    {
+        Debug.Log("Pause");
+        pause = !pause;
+        AppEvents.InvokeOnPauseEvent(pause);
     }
 
     /// <summary>

@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public bool cursorActive = true;
+    public bool isPaused = false;
 
     private static GameManager instance;
     public static GameManager Instance
@@ -29,11 +30,14 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         AppEvents.MouseCursorEnabled += EnableCursor;
+        AppEvents.PauseEnabled += PauseGame;
     }
 
     private void OnDisable()
     {
         AppEvents.MouseCursorEnabled -= EnableCursor;
+        AppEvents.PauseEnabled -= PauseGame;
+
     }
 
     // Start is called before the first frame update
@@ -62,5 +66,20 @@ public class GameManager : MonoBehaviour
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
+    }
+
+    void PauseGame(bool paused)
+    {
+        if (paused)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
+
+        EnableCursor(paused);
+
     }
 }
