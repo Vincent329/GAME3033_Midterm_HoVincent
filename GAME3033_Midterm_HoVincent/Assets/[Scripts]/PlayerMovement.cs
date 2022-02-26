@@ -17,15 +17,23 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float m_fmoveSpeed = 15.0f;
 
     [SerializeField] private Vector2 m_moveInputVector = Vector2.zero;
+    [SerializeField] private Transform checkGroundRay;
+
+    /// <summary>
+    /// Initializer
+    /// </summary>
     
+    [Header("States")]
     [SerializeField]
     private bool isActive = false;
+    [SerializeField] private bool isGrounded;
 
     private void Awake()
     {
         playerInputControls = new PlayerInputControls();
         playerInput = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody>();
+        isGrounded = false;
     }
     void Start()
     {
@@ -68,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
-        
+        isGrounded = CheckGrounded();
     }
 
     public void OnMove(InputAction.CallbackContext obj)
@@ -86,6 +94,15 @@ public class PlayerMovement : MonoBehaviour
     public void OnFire(InputAction.CallbackContext obj)
     {
 
+    }
+
+    /// <summary>
+    /// Raycasts a line down to check if the player has touched the ground
+    /// </summary>
+    private bool CheckGrounded()
+    {
+        bool groundCheck = Physics.Raycast(checkGroundRay.position, Vector3.down, 3.0f);
+        return groundCheck;
     }
 
 }
