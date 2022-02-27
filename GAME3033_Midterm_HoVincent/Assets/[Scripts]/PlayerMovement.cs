@@ -16,7 +16,8 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Player Variables")]
     [SerializeField] private float m_fJumpForce = 7.0f;
-    [SerializeField] private float m_fmoveSpeed = 15.0f;
+    [SerializeField] private float m_fMoveSpeed = 15.0f;
+    [SerializeField] private float m_fRotationSpeed = 15.0f;
 
     [SerializeField] private Vector3 m_moveInputVector = Vector3.zero;
     [SerializeField] private Vector3 m_ForceVector = Vector3.zero; // different so that we get the force applied to the character in world space
@@ -58,7 +59,8 @@ public class PlayerMovement : MonoBehaviour
         playerInputControls.Player.Enable();
         playerInputControls.Player.Move.performed += OnMove;
         playerInputControls.Player.Move.canceled += OnMove;
-        playerInputControls.Player.Fire.started += OnFire;
+        playerInputControls.Player.Fire.performed += OnFire;
+        playerInputControls.Player.Fire.canceled += OnFire;
         playerInputControls.Player.Jump.started += OnJump;
         playerInputControls.Player.Pause.started += OnPause;
     }
@@ -86,7 +88,8 @@ public class PlayerMovement : MonoBehaviour
         playerInputControls.Player.Move.Disable();
         playerInputControls.Player.Move.performed -= OnMove;
         playerInputControls.Player.Move.canceled -= OnMove;
-        playerInputControls.Player.Fire.started -= OnFire;
+        playerInputControls.Player.Fire.performed -= OnFire;
+        playerInputControls.Player.Fire.canceled -= OnFire;
         playerInputControls.Player.Jump.started -= OnJump;
         playerInputControls.Player.Pause.started -= OnPause;
 
@@ -107,11 +110,9 @@ public class PlayerMovement : MonoBehaviour
     {
         isGrounded = CheckGrounded();
         playerAnimController.SetBool(isGroundedHash, isGrounded);
-        Debug.Log(m_moveInputVector);
-
         //m_ForceVector += (m_moveInputVector.x * GetCameraRight(playerCamera) + m_moveInputVector.z * GetCameraForward(playerCamera)) * m_fmoveSpeed;
         //rb.AddForce(m_ForceVector, ForceMode.Impulse);
-        rb.MovePosition(rb.position + m_moveInputVector * m_fmoveSpeed * Time.deltaTime);
+        rb.MovePosition(rb.position + m_moveInputVector * m_fMoveSpeed * Time.deltaTime);
 
 
         
@@ -148,7 +149,17 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnFire(InputAction.CallbackContext obj)
     {
-        Debug.Log("Shoot some");
+        float fired = obj.ReadValue<float>();
+        bool check;
+        if (fired > 0)
+        {
+            check = true;
+        } else
+        {
+            check = false;
+        }
+        Debug.Log(fired);
+        playerAnimController.SetBool(isFiringHash, check);
     }
 
     private void OnJump(InputAction.CallbackContext obj)
