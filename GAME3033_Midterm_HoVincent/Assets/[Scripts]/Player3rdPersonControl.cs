@@ -33,7 +33,9 @@ public class Player3rdPersonControl : MonoBehaviour
         init = true;
         playerMovement = GetComponent<PlayerMovement>();
         playerMovement.playerInputControls.Player.Look.performed += OnLook;
-        playerMovement.playerInputControls.Player.Look.canceled += OnLook;
+        playerMovement.playerInputControls.Player.Look.canceled += OnLook; 
+        
+        playerMovement.playerInputControls.Player.Fire.started += FireWeapon;
     }
 
     private void OnEnable()
@@ -42,12 +44,16 @@ public class Player3rdPersonControl : MonoBehaviour
         {
             playerMovement.playerInputControls.Player.Look.performed += OnLook;
             playerMovement.playerInputControls.Player.Look.canceled += OnLook;
+
+            playerMovement.playerInputControls.Player.Fire.started += FireWeapon;
         }
     }
     private void OnDisable()
     {
-        playerMovement.playerInputControls.Player.Look.performed -= OnLook;
-        playerMovement.playerInputControls.Player.Look.canceled -= OnLook;
+        playerMovement.playerInputControls.Player.Look.performed -= FireWeapon;
+        playerMovement.playerInputControls.Player.Look.canceled -= FireWeapon;
+
+        playerMovement.playerInputControls.Player.Fire.started -= OnLook;
     }
     // Update is called once per frame
     void Update()
@@ -109,4 +115,8 @@ public class Player3rdPersonControl : MonoBehaviour
         }
     }
 
+    private void FireWeapon(InputAction.CallbackContext obj)
+    {
+        weapon.FireWeapon(aimLocation);
+    }
 }

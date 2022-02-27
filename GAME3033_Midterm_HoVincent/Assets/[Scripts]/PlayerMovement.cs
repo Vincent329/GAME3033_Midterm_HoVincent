@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float m_fJumpForce = 7.0f;
     [SerializeField] private float m_fMoveSpeed = 15.0f;
     [SerializeField] private float m_fGroundedRadius = 2.0f;
+    [SerializeField] private float m_fVerticalBlowbackForce = 4.0f;
 
     [SerializeField] private Vector3 m_moveInputVector = Vector3.zero;
     [SerializeField] private Vector3 m_ForceVector = Vector3.zero; // different so that we get the force applied to the character in world space
@@ -67,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
     {
         isActive = true;
         InitPlayerActions();
-
+        rb.velocity = Vector3.zero;
         if (!GameManager.Instance.cursorActive)
         {
             AppEvents.InvokeOnPauseEvent(false);
@@ -184,10 +186,28 @@ public class PlayerMovement : MonoBehaviour
         return groundCheck;
     }
 
+    public void BounceBack(Vector3 blastOrigin, float blowbackForce)
+    {
+        Vector3 distToBlast = transform.position - blastOrigin;
+        distToBlast.y = m_fVerticalBlowbackForce;
+        Vector3 distToBlastNormalized = distToBlast.normalized;
+        rb.AddForce(distToBlast * blowbackForce, ForceMode.Impulse);
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(checkGroundRay.position, m_fGroundedRadius);
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Bounds")) // bounds is layer 6
+        {
+            if (GameSceneManager.Instance != null)
+            {
+                GameSceneManager.Instance.LoadEndScene();
+            }
+        }
+    }
 }
