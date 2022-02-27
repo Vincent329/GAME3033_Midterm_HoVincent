@@ -10,7 +10,6 @@ public class PlayerMovement : MonoBehaviour
     public PlayerInputControls playerInputControls;
     private PlayerInput playerInput;
     private Animator playerAnimController;
-
     private Rigidbody rb;
 
     [Header("Player Variables")]
@@ -23,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private Transform checkGroundRay;
     [SerializeField] private LayerMask GroundedLayers;
+    [SerializeField] private Camera playerCamera;
     /// <summary>
     /// Initializer
     /// </summary>
@@ -106,10 +106,10 @@ public class PlayerMovement : MonoBehaviour
     {
         isGrounded = CheckGrounded();
         playerAnimController.SetBool(isGroundedHash, isGrounded);
-        //m_ForceVector += (m_moveInputVector.x * GetCameraRight(playerCamera) + m_moveInputVector.z * GetCameraForward(playerCamera)) * m_fmoveSpeed;
+        m_ForceVector += (m_moveInputVector.x * GetCameraRight(playerCamera) + m_moveInputVector.z * GetCameraForward(playerCamera)) * m_fMoveSpeed * Time.deltaTime;
         //rb.AddForce(m_ForceVector, ForceMode.Impulse);
-        rb.MovePosition(rb.position + m_moveInputVector * m_fMoveSpeed * Time.deltaTime);
-
+        rb.MovePosition(rb.position + m_ForceVector * m_fMoveSpeed * Time.deltaTime);
+        m_ForceVector = Vector3.zero;
 
         
     }

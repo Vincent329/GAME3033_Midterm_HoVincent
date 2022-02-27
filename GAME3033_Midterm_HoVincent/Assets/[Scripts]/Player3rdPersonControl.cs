@@ -12,17 +12,22 @@ public class Player3rdPersonControl : MonoBehaviour
     [SerializeField] private float m_fTopClamp = 70.0f;
     [SerializeField] private float m_fThreshold = 1.0f;
     [SerializeField] private float m_fCameraAngleOverride = 0.0f;
+    [SerializeField] private LayerMask aimColliderMask;
+    [SerializeField] private Transform aimLocation;
+
+    public Transform getAimLocation => aimLocation;
 
     float _cinemachineTargetYaw;
     float _cinemachineTargetPitch;
 
     bool init = false;
-    [SerializeField] private Vector2 m_lookVector = Vector2.zero;
+    [SerializeField] private Vector2 m_lookVector;
 
     private PlayerMovement playerMovement;
     // Start is called before the first frame update
     void Start()
     {
+        CinemachineCameraTarget.transform.rotation = Quaternion.identity;
         init = true;
         playerMovement = GetComponent<PlayerMovement>();
         playerMovement.playerInputControls.Player.Look.performed += OnLook;
@@ -46,6 +51,7 @@ public class Player3rdPersonControl : MonoBehaviour
     void Update()
     {
         CameraRotation();
+        AimUpdate();
     }
 
     private void OnLook(InputAction.CallbackContext obj)
@@ -73,4 +79,25 @@ public class Player3rdPersonControl : MonoBehaviour
         if (lfAngle > 360f) lfAngle -= 360f;
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
     }
+
+    private void AimUpdate()
+    {
+        Vector3 mouseWorldPos = Vector3.zero;
+
+        Vector2 screenCenter = new Vector2(Screen.width / 2f, Screen.height / 2f);
+        Ray ray = Camera.main.ScreenPointToRay(screenCenter);
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, Mathf.Infinity, aimColliderMask))
+        {
+            aimLocation.position = raycastHit.point;
+            mouseWorldPos = raycastHit.point;
+        }
+
+        Vector3 worldAimTarget = mouseWorldPos;
+        worldAimTarget.y = transform.position.y;
+        Vector3 aimDir = (worldAimTarget - mouseWorldPos).normalized;
+
+        // rotate the player rotation based on the look transform
+        transform.rotation = Quaternion.Euler(0, CinemachineCameraTarget.transform.rotation.eulerAngles.y, 0);
+    }
+
 }
