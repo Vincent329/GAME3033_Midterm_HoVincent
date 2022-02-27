@@ -754,6 +754,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorActive: 0
+  isPaused: 0
 --- !u!4 &1045197325
 Transform:
   m_ObjectHideFlags: 0
@@ -1083,6 +1084,14 @@ PrefabInstance:
       propertyPath: m_ApplyRootMotion
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5227217352492708865, guid: 678d0e377e9f0384ab8ce02f9990b413, type: 3}
+      propertyPath: m_fmoveSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5227217352492708865, guid: 678d0e377e9f0384ab8ce02f9990b413, type: 3}
+      propertyPath: playerCamera
+      value: 
+      objectReference: {fileID: 963194227}
     - target: {fileID: 5227217352492708867, guid: 678d0e377e9f0384ab8ce02f9990b413, type: 3}
       propertyPath: m_Height
       value: 1.9413288

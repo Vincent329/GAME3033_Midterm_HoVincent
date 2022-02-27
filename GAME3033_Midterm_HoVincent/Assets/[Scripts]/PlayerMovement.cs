@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float m_fJumpForce = 7.0f;
     [SerializeField] private float m_fmoveSpeed = 15.0f;
 
-    [SerializeField] private Vector2 m_moveInputVector = Vector2.zero;
+    [SerializeField] private Vector3 m_moveInputVector = Vector3.zero;
     [SerializeField] private Vector3 m_ForceVector = Vector3.zero; // different so that we get the force applied to the character in world space
 
     [SerializeField] private Vector2 m_lookVector = Vector2.zero;
@@ -68,7 +68,6 @@ public class PlayerMovement : MonoBehaviour
         isActive = true;
         InitPlayerActions();
 
-
         if (!GameManager.Instance.cursorActive)
         {
             AppEvents.InvokeOnPauseEvent(false);
@@ -79,7 +78,6 @@ public class PlayerMovement : MonoBehaviour
         if (isActive)
         {
             InitPlayerActions();
-
         }
     }
 
@@ -97,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (m_moveInputVector.magnitude > 0) m_moveInputVector = Vector2.zero;
+        if (!(m_moveInputVector.magnitude >= 0)) m_moveInputVector = Vector2.zero;
 
 
     }
@@ -109,32 +107,61 @@ public class PlayerMovement : MonoBehaviour
     {
         isGrounded = CheckGrounded();
         playerAnimController.SetBool(isGroundedHash, isGrounded);
+        Debug.Log(m_moveInputVector);
+
+        //m_ForceVector += (m_moveInputVector.x * GetCameraRight(playerCamera) + m_moveInputVector.z * GetCameraForward(playerCamera)) * m_fmoveSpeed;
+        //rb.AddForce(m_ForceVector, ForceMode.Impulse);
+        rb.MovePosition(rb.position + m_moveInputVector * m_fmoveSpeed * Time.deltaTime);
+
+
+        
     }
 
-    public void OnMove(InputAction.CallbackContext obj)
+    private Vector3 GetCameraForward(Camera pCam)
     {
-        m_moveInputVector = obj.ReadValue<Vector2>();
-        playerAnimController.SetFloat(movementYHash, m_moveInputVector.y);
-        playerAnimController.SetFloat(movementXHash, m_moveInputVector.x);
+        Vector3 forward = pCam.transform.forward;
+        forward.y = 0;
+        return forward.normalized;
+    }
+    
+    private Vector3 GetCameraRight(Camera pCam)
+    {
+        Vector3 right = pCam.transform.right;
+        right.y = 0;
+        return right.normalized;
     }
 
-    public void OnLook(InputAction.CallbackContext obj)
+
+    private void OnMove(InputAction.CallbackContext obj)
+    {
+        
+        Vector2 velocity = obj.ReadValue<Vector2>();
+        m_moveInputVector = new Vector3(velocity.x, 0, velocity.y);
+        playerAnimController.SetFloat(movementYHash, velocity.y);
+        playerAnimController.SetFloat(movementXHash, velocity.x);
+    }
+
+    private void OnLook(InputAction.CallbackContext obj)
     {
         m_lookVector = obj.ReadValue<Vector2>();
     }
 
-    public void OnFire(InputAction.CallbackContext obj)
+    private void OnFire(InputAction.CallbackContext obj)
     {
-        Debug.Log("Shoot some shit");
+        Debug.Log("Shoot some");
     }
 
-    public void OnJump(InputAction.CallbackContext obj)
+    private void OnJump(InputAction.CallbackContext obj)
     {
-        Debug.Log("Jump");
-        rb.AddForce((Vector3.up * m_fJumpForce), ForceMode.Impulse);
-        playerAnimController.SetTrigger(isJumpingHash);
+        if (isGrounded)
+        {
+            Debug.Log("Jump");
+
+            rb.AddForce((Vector3.up * m_fJumpForce), ForceMode.Impulse);
+            playerAnimController.SetTrigger(isJumpingHash);
+        }
     }
-    public void OnPause(InputAction.CallbackContext obj)
+    private void OnPause(InputAction.CallbackContext obj)
     {
         Debug.Log("Pause");
         pause = !pause;
