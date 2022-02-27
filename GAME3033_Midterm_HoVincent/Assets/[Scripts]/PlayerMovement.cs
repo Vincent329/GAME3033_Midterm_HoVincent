@@ -10,6 +10,8 @@ public class PlayerMovement : MonoBehaviour
     public PlayerInputControls playerInputControls;
     [SerializeField]
     private PlayerInput playerInput;
+    private Animator playerAnimController;
+
     private Rigidbody rb;
 
     [Header("Player Variables")]
@@ -18,7 +20,11 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private Vector2 m_moveInputVector = Vector2.zero;
     [SerializeField] private Vector3 m_ForceVector = Vector3.zero; // different so that we get the force applied to the character in world space
+
+    [SerializeField] private Vector2 m_lookVector = Vector2.zero;
     [SerializeField] private Transform checkGroundRay;
+
+    [SerializeField] private Camera playerCamera;
 
     /// <summary>
     /// Initializer
@@ -33,7 +39,8 @@ public class PlayerMovement : MonoBehaviour
     // Animator Hashes
     public readonly int movementXHash = Animator.StringToHash("MovementX");
     public readonly int movementYHash = Animator.StringToHash("MovementY");
-    public readonly int isJumpingHash = Animator.StringToHash("isJumping");
+    public readonly int isGroundedHash = Animator.StringToHash("isGrounded");
+    public readonly int isJumpingHash = Animator.StringToHash("didJump");
     public readonly int isFiringHash = Animator.StringToHash("isFiring");
 
     private void Awake()
@@ -41,11 +48,12 @@ public class PlayerMovement : MonoBehaviour
         playerInputControls = new PlayerInputControls();
         playerInput = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody>();
+        playerAnimController = GetComponent<Animator>();
         isGrounded = false;
     }
-    void Start()
+
+    private void InitPlayerActions()
     {
-        isActive = true;
         Debug.Log("BIND DAMMIT");
         playerInputControls.Player.Enable();
         playerInputControls.Player.Move.performed += OnMove;
@@ -53,6 +61,13 @@ public class PlayerMovement : MonoBehaviour
         playerInputControls.Player.Fire.started += OnFire;
         playerInputControls.Player.Jump.started += OnJump;
         playerInputControls.Player.Pause.started += OnPause;
+    }
+
+    void Start()
+    {
+        isActive = true;
+        InitPlayerActions();
+
 
         if (!GameManager.Instance.cursorActive)
         {
@@ -63,12 +78,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isActive)
         {
-            playerInputControls.Player.Move.Enable();
-            playerInputControls.Player.Move.performed += OnMove;
-            playerInputControls.Player.Move.canceled += OnMove;
-            playerInputControls.Player.Fire.started += OnFire;
-            playerInputControls.Player.Jump.started += OnJump;
-            playerInputControls.Player.Pause.started += OnPause;
+            InitPlayerActions();
 
         }
     }
@@ -88,6 +98,8 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         if (m_moveInputVector.magnitude > 0) m_moveInputVector = Vector2.zero;
+
+
     }
 
     /// <summary>
@@ -96,15 +108,19 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         isGrounded = CheckGrounded();
+        playerAnimController.SetBool(isGroundedHash, isGrounded);
     }
 
     public void OnMove(InputAction.CallbackContext obj)
     {
         m_moveInputVector = obj.ReadValue<Vector2>();
+        playerAnimController.SetFloat(movementYHash, m_moveInputVector.y);
+        playerAnimController.SetFloat(movementXHash, m_moveInputVector.x);
     }
 
     public void OnLook(InputAction.CallbackContext obj)
     {
+        m_lookVector = obj.ReadValue<Vector2>();
     }
 
     public void OnFire(InputAction.CallbackContext obj)
@@ -115,7 +131,8 @@ public class PlayerMovement : MonoBehaviour
     public void OnJump(InputAction.CallbackContext obj)
     {
         Debug.Log("Jump");
-
+        rb.AddForce((Vector3.up * m_fJumpForce), ForceMode.Impulse);
+        playerAnimController.SetTrigger(isJumpingHash);
     }
     public void OnPause(InputAction.CallbackContext obj)
     {
