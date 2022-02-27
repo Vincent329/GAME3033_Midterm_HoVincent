@@ -14,7 +14,7 @@ public class Player3rdPersonControl : MonoBehaviour
     [SerializeField] private float m_fCameraAngleOverride = 0.0f;
     [SerializeField] private LayerMask aimColliderMask;
     [SerializeField] private Transform aimLocation;
-
+    [SerializeField] private WeaponScript weapon;
     public Transform getAimLocation => aimLocation;
 
     float _cinemachineTargetYaw;
@@ -82,19 +82,18 @@ public class Player3rdPersonControl : MonoBehaviour
 
     private void AimUpdate()
     {
-        Vector3 mouseWorldPos = Vector3.zero;
 
         Vector2 screenCenter = new Vector2(Screen.width / 2f, Screen.height / 2f);
         Ray ray = Camera.main.ScreenPointToRay(screenCenter);
+
+        Transform hitTransform = null;
         if (Physics.Raycast(ray, out RaycastHit raycastHit, Mathf.Infinity, aimColliderMask))
         {
             aimLocation.position = raycastHit.point;
-            mouseWorldPos = raycastHit.point;
+            hitTransform = raycastHit.transform;
         }
 
-        Vector3 worldAimTarget = mouseWorldPos;
-        worldAimTarget.y = transform.position.y;
-        Vector3 aimDir = (worldAimTarget - mouseWorldPos).normalized;
+      
 
         // rotate the player rotation based on the look transform
         transform.rotation = Quaternion.Euler(0, CinemachineCameraTarget.transform.rotation.eulerAngles.y, 0);
