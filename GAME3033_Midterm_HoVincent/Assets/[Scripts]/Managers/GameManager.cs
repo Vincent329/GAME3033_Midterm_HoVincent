@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public bool cursorActive = true;
     public bool isPaused = false;
+
+    public int totalEnemies;
 
     private static GameManager instance;
     public static GameManager Instance
@@ -43,9 +45,9 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        totalEnemies = FindObjectsOfType<EnemyAI>().Length;
+        Debug.Log(totalEnemies);
     }
-
     // Update is called once per frame
     void Update()
     {

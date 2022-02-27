@@ -117,6 +117,9 @@ public class Player3rdPersonControl : MonoBehaviour
 
     private void FireWeapon(InputAction.CallbackContext obj)
     {
-        weapon.FireWeapon(aimLocation);
+        if (!playerMovement.pause)
+        {
+            weapon.FireWeapon(aimLocation);
+        }
     }
 }

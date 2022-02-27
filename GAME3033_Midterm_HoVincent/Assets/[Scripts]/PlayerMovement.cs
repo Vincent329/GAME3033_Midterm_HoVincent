@@ -25,17 +25,16 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform checkGroundRay;
     [SerializeField] private LayerMask GroundedLayers;
     [SerializeField] private Camera playerCamera;
-    /// <summary>
-    /// Initializer
-    /// </summary>
 
     [Header("States")]
     [SerializeField]
     private bool isActive = false;
-    private bool pause = false;
+    public bool pause = false;
     public bool firing = false;
     [SerializeField] private bool isGrounded;
 
+    [Header("Pause Menu")]
+    [SerializeField] private GameObject PausePanel;
     // Animator Hashes
     public readonly int movementXHash = Animator.StringToHash("MovementX");
     public readonly int movementYHash = Animator.StringToHash("MovementY");
@@ -70,6 +69,7 @@ public class PlayerMovement : MonoBehaviour
         isActive = true;
         InitPlayerActions();
         rb.velocity = Vector3.zero;
+        PausePanel.SetActive(false);
         if (!GameManager.Instance.cursorActive)
         {
             AppEvents.InvokeOnPauseEvent(false);
@@ -168,11 +168,19 @@ public class PlayerMovement : MonoBehaviour
             playerAnimController.SetTrigger(isJumpingHash);
         }
     }
-    private void OnPause(InputAction.CallbackContext obj)
+
+    public void PauseButtonFunction()
+    {
+        pause = !pause;
+        PausePanel.SetActive(pause);
+        AppEvents.InvokeOnPauseEvent(pause);
+    }
+
+    public void OnPause(InputAction.CallbackContext obj)
     {
         Debug.Log("Pause");
-        pause = !pause;
-        AppEvents.InvokeOnPauseEvent(pause);
+        PauseButtonFunction();
+
     }
 
     /// <summary>

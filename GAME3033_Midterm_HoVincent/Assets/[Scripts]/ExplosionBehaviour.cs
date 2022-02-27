@@ -8,9 +8,11 @@ public class ExplosionBehaviour : MonoBehaviour
     Rigidbody rb;
     public bool hitEnemy;
     [SerializeField] float m_fExplosiveForce;
+    [SerializeField] Renderer renderComp;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        renderComp = GetComponent<Renderer>();
         rb.isKinematic = true;
         hitEnemy = true;
     }
@@ -18,6 +20,7 @@ public class ExplosionBehaviour : MonoBehaviour
     public void ToggleHitEnemy()
     {
         hitEnemy = false;
+        renderComp.material.color = Color.blue;
     }
 
     public void Disappear()

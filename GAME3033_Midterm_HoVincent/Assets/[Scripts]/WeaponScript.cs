@@ -19,19 +19,6 @@ public class WeaponScript : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-      
-    }
-
-    private void OnEnable()
-    {
-      
-    }
-    private void OnDisable()
-    {
-
-    }
 
     // Update is called once per frame
     void Update()
@@ -45,7 +32,6 @@ public class WeaponScript : MonoBehaviour
     /// <param name="obj"></param>
     public void FireWeapon(Transform locationOfSpawn)
     {
-        Debug.Log("BAP BAP BAP");
         Instantiate(explosion, locationOfSpawn.position, locationOfSpawn.rotation);
     }
 }
