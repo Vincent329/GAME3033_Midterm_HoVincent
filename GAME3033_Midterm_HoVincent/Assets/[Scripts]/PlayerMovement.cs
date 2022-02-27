@@ -8,7 +8,6 @@ public class PlayerMovement : MonoBehaviour
 {
     // Start is called before the first frame update
     public PlayerInputControls playerInputControls;
-    [SerializeField]
     private PlayerInput playerInput;
     private Animator playerAnimController;
 
@@ -17,16 +16,13 @@ public class PlayerMovement : MonoBehaviour
     [Header("Player Variables")]
     [SerializeField] private float m_fJumpForce = 7.0f;
     [SerializeField] private float m_fMoveSpeed = 15.0f;
-    [SerializeField] private float m_fRotationSpeed = 15.0f;
+    [SerializeField] private float m_fGroundedRadius = 2.0f;
 
     [SerializeField] private Vector3 m_moveInputVector = Vector3.zero;
     [SerializeField] private Vector3 m_ForceVector = Vector3.zero; // different so that we get the force applied to the character in world space
 
-    [SerializeField] private Vector2 m_lookVector = Vector2.zero;
     [SerializeField] private Transform checkGroundRay;
-
-    [SerializeField] private Camera playerCamera;
-
+    [SerializeField] private LayerMask GroundedLayers;
     /// <summary>
     /// Initializer
     /// </summary>
@@ -142,11 +138,6 @@ public class PlayerMovement : MonoBehaviour
         playerAnimController.SetFloat(movementXHash, velocity.x);
     }
 
-    private void OnLook(InputAction.CallbackContext obj)
-    {
-        m_lookVector = obj.ReadValue<Vector2>();
-    }
-
     private void OnFire(InputAction.CallbackContext obj)
     {
         float fired = obj.ReadValue<float>();
@@ -184,8 +175,16 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private bool CheckGrounded()
     {
-        bool groundCheck = Physics.Raycast(checkGroundRay.position, Vector3.down, 3.0f);
+        Vector3 CheckPosition = checkGroundRay.position;
+        bool groundCheck = Physics.CheckSphere(CheckPosition, m_fGroundedRadius, GroundedLayers, QueryTriggerInteraction.Ignore);
+
         return groundCheck;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(checkGroundRay.position, m_fGroundedRadius);
     }
 
 }

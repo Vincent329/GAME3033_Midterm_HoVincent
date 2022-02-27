@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 385484948}
   - component: {fileID: 385484947}
   - component: {fileID: 385484946}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ground Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -232,7 +232,7 @@ GameObject:
   - component: {fileID: 553347908}
   - component: {fileID: 553347907}
   - component: {fileID: 553347906}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ground Plane (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -423,7 +423,7 @@ GameObject:
   - component: {fileID: 718976408}
   - component: {fileID: 718976407}
   - component: {fileID: 718976406}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ground Plane (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -520,7 +520,7 @@ GameObject:
   - component: {fileID: 906930127}
   - component: {fileID: 906930126}
   - component: {fileID: 906930125}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ground Plane (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -770,6 +770,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1176887492 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2470862702700404714, guid: 678d0e377e9f0384ab8ce02f9990b413, type: 3}
+  m_PrefabInstance: {fileID: 5227217352492708863}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1176887493 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6355521880047998803, guid: 678d0e377e9f0384ab8ce02f9990b413, type: 3}
@@ -837,7 +842,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1523749714}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0.2506346, y: -0.1125462, z: 0.029350614, w: 0.9610693}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -856,7 +861,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1643928485}
   - component: {fileID: 1643928488}
-  - component: {fileID: 1643928487}
   - component: {fileID: 1643928486}
   m_Layer: 0
   m_Name: cm
@@ -892,7 +896,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6043bde05a7fc4cba197d06915c1e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damping: {x: 0.1, y: 0.1, z: 0.1}
+  Damping: {x: 0, y: 0, z: 0}
   ShoulderOffset: {x: 0.83, y: -0.34, z: 0}
   VerticalArmLength: 0.4
   CameraSide: 1
@@ -904,33 +908,6 @@ MonoBehaviour:
   CameraRadius: 0.2
   DampingIntoCollision: 0
   DampingFromCollision: 2
---- !u!114 &1643928487
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1643928484}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4044717213e31446939f7bd49c896ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_TrackedObjectOffset: {x: 0, y: 0, z: 0}
-  m_LookaheadTime: 0
-  m_LookaheadSmoothing: 0
-  m_LookaheadIgnoreY: 0
-  m_HorizontalDamping: 0.5
-  m_VerticalDamping: 0.5
-  m_ScreenX: 0.5
-  m_ScreenY: 0.5
-  m_DeadZoneWidth: 0
-  m_DeadZoneHeight: 0
-  m_SoftZoneWidth: 0.8
-  m_SoftZoneHeight: 0.8
-  m_BiasX: 0
-  m_BiasY: 0
-  m_CenterOnActivate: 1
 --- !u!114 &1643928488
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -955,7 +932,7 @@ GameObject:
   - component: {fileID: 1966491382}
   - component: {fileID: 1966491381}
   - component: {fileID: 1966491380}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ground Plane (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1092,6 +1069,10 @@ PrefabInstance:
       propertyPath: playerCamera
       value: 
       objectReference: {fileID: 963194227}
+    - target: {fileID: 5227217352492708865, guid: 678d0e377e9f0384ab8ce02f9990b413, type: 3}
+      propertyPath: GroundedLayers.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5227217352492708867, guid: 678d0e377e9f0384ab8ce02f9990b413, type: 3}
       propertyPath: m_Height
       value: 1.9413288
@@ -1261,3 +1242,22 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &5227217352492708872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5227217352492708864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56f0faf3068bb204397b6d15767d3792, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CinemachineCameraTarget: {fileID: 1176887492}
+  m_fAimSensitivity: 5
+  m_fBottomClamp: -70
+  m_fTopClamp: 70
+  m_fThreshold: 1
+  m_fCameraAngleOverride: 0
+  m_lookVector: {x: 0, y: 0}
