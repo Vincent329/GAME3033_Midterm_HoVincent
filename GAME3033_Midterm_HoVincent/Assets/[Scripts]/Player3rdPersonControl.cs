@@ -15,6 +15,8 @@ public class Player3rdPersonControl : MonoBehaviour
     [SerializeField] private LayerMask aimColliderMask;
     [SerializeField] private Transform aimLocation;
     [SerializeField] private WeaponScript weapon;
+
+    [SerializeField] private Transform playVFXLocation;
     public Transform getAimLocation => aimLocation;
 
     float _cinemachineTargetYaw;
@@ -71,6 +73,8 @@ public class Player3rdPersonControl : MonoBehaviour
         _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, m_fBottomClamp, m_fTopClamp);
 
         CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + m_fCameraAngleOverride, _cinemachineTargetYaw, 0.0f);
+        transform.rotation = Quaternion.Euler(0, CinemachineCameraTarget.transform.rotation.eulerAngles.y, 0);
+
     }
 
     private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
@@ -80,6 +84,9 @@ public class Player3rdPersonControl : MonoBehaviour
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
     }
 
+    /// <summary>
+    /// updates the raycast
+    /// </summary>
     private void AimUpdate()
     {
 
@@ -91,12 +98,15 @@ public class Player3rdPersonControl : MonoBehaviour
         {
             aimLocation.position = raycastHit.point;
             hitTransform = raycastHit.transform;
-        }
-
-      
-
+        } 
         // rotate the player rotation based on the look transform
-        transform.rotation = Quaternion.Euler(0, CinemachineCameraTarget.transform.rotation.eulerAngles.y, 0);
+        if (playerMovement.firing)
+        {
+            if (hitTransform != null)
+            {
+                Debug.Log("Hit");
+            }
+        }
     }
 
 }

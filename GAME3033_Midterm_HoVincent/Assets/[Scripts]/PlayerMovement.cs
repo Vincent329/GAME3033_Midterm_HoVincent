@@ -31,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private bool isActive = false;
     private bool pause = false;
+    public bool firing = false;
     [SerializeField] private bool isGrounded;
 
     // Animator Hashes
@@ -39,6 +40,7 @@ public class PlayerMovement : MonoBehaviour
     public readonly int isGroundedHash = Animator.StringToHash("isGrounded");
     public readonly int isJumpingHash = Animator.StringToHash("didJump");
     public readonly int isFiringHash = Animator.StringToHash("isFiring");
+    public readonly int didFireHash = Animator.StringToHash("didFire");
 
     private void Awake()
     {
@@ -55,7 +57,7 @@ public class PlayerMovement : MonoBehaviour
         playerInputControls.Player.Enable();
         playerInputControls.Player.Move.performed += OnMove;
         playerInputControls.Player.Move.canceled += OnMove;
-        playerInputControls.Player.Fire.performed += OnFire;
+        playerInputControls.Player.Fire.started += OnFire;
         playerInputControls.Player.Fire.canceled += OnFire;
         playerInputControls.Player.Jump.started += OnJump;
         playerInputControls.Player.Pause.started += OnPause;
@@ -84,7 +86,7 @@ public class PlayerMovement : MonoBehaviour
         playerInputControls.Player.Move.Disable();
         playerInputControls.Player.Move.performed -= OnMove;
         playerInputControls.Player.Move.canceled -= OnMove;
-        playerInputControls.Player.Fire.performed -= OnFire;
+        playerInputControls.Player.Fire.started -= OnFire;
         playerInputControls.Player.Fire.canceled -= OnFire;
         playerInputControls.Player.Jump.started -= OnJump;
         playerInputControls.Player.Pause.started -= OnPause;
@@ -141,16 +143,17 @@ public class PlayerMovement : MonoBehaviour
     private void OnFire(InputAction.CallbackContext obj)
     {
         float fired = obj.ReadValue<float>();
-        bool check;
         if (fired > 0)
         {
-            check = true;
-        } else
-        {
-            check = false;
+            firing = true;
+            playerAnimController.SetTrigger(didFireHash);
         }
-        Debug.Log(fired);
-        playerAnimController.SetBool(isFiringHash, check);
+        else
+        {
+            firing = false;
+        }
+        Debug.Log(firing);
+        //playerAnimController.SetBool(isFiringHash, firing);
     }
 
     private void OnJump(InputAction.CallbackContext obj)

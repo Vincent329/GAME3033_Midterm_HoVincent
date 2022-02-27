@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class WeaponScript : MonoBehaviour
 {
-   
+    
 
     void Start()
     {
@@ -27,7 +27,11 @@ public class WeaponScript : MonoBehaviour
         
     }
 
-    void FireWeapon()
+    /// <summary>
+    /// call this through the player controller somehow
+    /// </summary>
+    /// <param name="obj"></param>
+    public void FireWeapon(InputAction.CallbackContext obj)
     {
         Debug.Log("BAP BAP BAP");
     }
