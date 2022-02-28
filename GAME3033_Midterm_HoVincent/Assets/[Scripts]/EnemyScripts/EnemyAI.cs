@@ -50,7 +50,12 @@ public class EnemyAI : MonoBehaviour
         if (collision.gameObject.CompareTag("Bounds") && !isChasingPlayer) 
         {
             // increase score as well
+            GameManager.Instance.UpdateEnemyCount();
             Destroy(gameObject);
+        }
+        else if (collision.gameObject.GetComponent<PlayerMovement>() != null)
+        {
+            collision.gameObject.GetComponent<PlayerMovement>().BounceBack(transform.position, 2.25f);
         }
     }
 }

@@ -50,10 +50,13 @@ public class Player3rdPersonControl : MonoBehaviour
     }
     private void OnDisable()
     {
-        playerMovement.playerInputControls.Player.Look.performed -= FireWeapon;
-        playerMovement.playerInputControls.Player.Look.canceled -= FireWeapon;
+        if (init)
+        {
+            playerMovement.playerInputControls.Player.Look.performed -= OnLook;
+            playerMovement.playerInputControls.Player.Look.canceled -= OnLook;
 
-        playerMovement.playerInputControls.Player.Fire.started -= OnLook;
+            playerMovement.playerInputControls.Player.Fire.started -= FireWeapon;
+        }
     }
     // Update is called once per frame
     void Update()

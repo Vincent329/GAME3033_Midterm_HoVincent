@@ -2210,7 +2210,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!136 &5227217352492708867
 CapsuleCollider:
@@ -2241,6 +2241,7 @@ MonoBehaviour:
   m_fJumpForce: 15
   m_fMoveSpeed: 30
   m_fGroundedRadius: 0.49
+  m_fVerticalBlowbackForce: 4
   m_moveInputVector: {x: 0, y: 0, z: 0}
   m_ForceVector: {x: 0, y: 0, z: 0}
   checkGroundRay: {fileID: 7575855663677056179}
@@ -2249,8 +2250,11 @@ MonoBehaviour:
     m_Bits: 8
   playerCamera: {fileID: 0}
   isActive: 0
+  pause: 0
   firing: 0
   isGrounded: 0
+  PausePanel: {fileID: 0}
+  TextCountUpdate: {fileID: 0}
 --- !u!114 &5227217352492708871
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2363,7 +2367,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   aimLocation: {fileID: 0}
-  weapon: {fileID: 0}
+  weapon: {fileID: 670961530726951425}
   playVFXLocation: {fileID: 0}
   m_lookVector: {x: 0, y: 0}
 --- !u!114 &5227217352492708878
@@ -2638,7 +2642,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3c430f382484144e925c097c2d33cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Weight: 0.7
+  m_Weight: 0.656
   m_Data:
     m_ConstrainedObject: {fileID: 2543899436932884119}
     m_SourceObjects:
@@ -3057,6 +3061,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b86e3bb2d2fb8074491c16d2ae3ae924, type: 3}
+--- !u!114 &670961530726951425 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -4191751471420932105, guid: b86e3bb2d2fb8074491c16d2ae3ae924, type: 3}
+  m_PrefabInstance: {fileID: 5520379378079716854}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56e6907e054c513428fc14cbe7944e08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1036448348875686361 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4827409666702300207, guid: b86e3bb2d2fb8074491c16d2ae3ae924, type: 3}

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -35,6 +36,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Pause Menu")]
     [SerializeField] private GameObject PausePanel;
+    [SerializeField] private TextMeshProUGUI TextCountUpdate;
     // Animator Hashes
     public readonly int movementXHash = Animator.StringToHash("MovementX");
     public readonly int movementYHash = Animator.StringToHash("MovementY");
@@ -62,6 +64,8 @@ public class PlayerMovement : MonoBehaviour
         playerInputControls.Player.Fire.canceled += OnFire;
         playerInputControls.Player.Jump.started += OnJump;
         playerInputControls.Player.Pause.started += OnPause;
+        GameManager.Instance.UpdateTextCount += EnemyCountUpdate;
+
     }
 
     void Start()
@@ -70,8 +74,15 @@ public class PlayerMovement : MonoBehaviour
         InitPlayerActions();
         rb.velocity = Vector3.zero;
         PausePanel.SetActive(false);
+        GameManager.Instance.cursorActive = false;
+        TextCountUpdate.text = "Enemies Remaining: " + GameManager.Instance.totalEnemies;
+
+
+
         if (!GameManager.Instance.cursorActive)
         {
+            pause = false;
+            PausePanel.SetActive(pause);
             AppEvents.InvokeOnPauseEvent(false);
         }
     }
@@ -92,6 +103,7 @@ public class PlayerMovement : MonoBehaviour
         playerInputControls.Player.Fire.canceled -= OnFire;
         playerInputControls.Player.Jump.started -= OnJump;
         playerInputControls.Player.Pause.started -= OnPause;
+        GameManager.Instance.UpdateTextCount -= EnemyCountUpdate;
 
     }
 
@@ -99,8 +111,6 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         if (!(m_moveInputVector.magnitude >= 0)) m_moveInputVector = Vector2.zero;
-
-
     }
 
     /// <summary>
@@ -114,8 +124,6 @@ public class PlayerMovement : MonoBehaviour
         //rb.AddForce(m_ForceVector, ForceMode.Impulse);
         rb.MovePosition(rb.position + m_ForceVector * m_fMoveSpeed * Time.deltaTime);
         m_ForceVector = Vector3.zero;
-
-        
     }
 
     private Vector3 GetCameraForward(Camera pCam)
@@ -192,6 +200,11 @@ public class PlayerMovement : MonoBehaviour
         bool groundCheck = Physics.CheckSphere(CheckPosition, m_fGroundedRadius, GroundedLayers, QueryTriggerInteraction.Ignore);
 
         return groundCheck;
+    }
+
+    private void EnemyCountUpdate(int enemyCount)
+    {
+        TextCountUpdate.text = "Enemies Remaining: " + enemyCount;
     }
 
     public void BounceBack(Vector3 blastOrigin, float blowbackForce)

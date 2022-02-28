@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
@@ -8,6 +9,9 @@ public class GameManager : MonoBehaviour
     public bool isPaused = false;
 
     public int totalEnemies;
+
+    public delegate void UpdateText(int count);
+    public event UpdateText UpdateTextCount;
 
     private static GameManager instance;
     public static GameManager Instance
@@ -33,6 +37,7 @@ public class GameManager : MonoBehaviour
     {
         AppEvents.MouseCursorEnabled += EnableCursor;
         AppEvents.PauseEnabled += PauseGame;
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
@@ -41,6 +46,11 @@ public class GameManager : MonoBehaviour
         AppEvents.PauseEnabled -= PauseGame;
 
     }
+    
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        ResetCount();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -48,10 +58,26 @@ public class GameManager : MonoBehaviour
         totalEnemies = FindObjectsOfType<EnemyAI>().Length;
         Debug.Log(totalEnemies);
     }
+
+    public void ResetCount()
+    {
+        totalEnemies = FindObjectsOfType<EnemyAI>().Length;
+
+    }
     // Update is called once per frame
     void Update()
     {
 
+    }
+
+    public void UpdateEnemyCount()
+    {
+        totalEnemies--;
+        UpdateTextCount(totalEnemies);
+        if (totalEnemies <= 0)
+        {
+            GameSceneManager.Instance.LoadEndScene();
+        }
     }
 
     void EnableCursor(bool enable)
