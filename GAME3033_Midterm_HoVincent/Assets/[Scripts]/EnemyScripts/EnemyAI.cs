@@ -16,12 +16,15 @@ public class EnemyAI : MonoBehaviour
     bool isChasingPlayer;
     Rigidbody rb;
 
+    AudioSource audioSource;
+
     // Start is called before the first frame update
     void Start()
     {
         isChasingPlayer = true;
         player = FindObjectOfType<PlayerMovement>().transform;
         rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
         rb.useGravity = false;
     }
 
@@ -43,6 +46,7 @@ public class EnemyAI : MonoBehaviour
         distToBlast.y = m_fVerticalBlowbackForce;
         Vector3 distToBlastNormalized = distToBlast.normalized;
         rb.AddForce(distToBlast * blowbackForce, ForceMode.Impulse);
+        audioSource.Play();
     }
 
     private void OnCollisionEnter(Collision collision)

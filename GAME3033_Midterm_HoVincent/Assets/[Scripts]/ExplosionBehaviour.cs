@@ -11,6 +11,7 @@ public class ExplosionBehaviour : MonoBehaviour
     [SerializeField] Renderer renderComp;
     void Start()
     {
+
         rb = GetComponent<Rigidbody>();
         renderComp = GetComponent<Renderer>();
         rb.isKinematic = true;
@@ -37,11 +38,11 @@ public class ExplosionBehaviour : MonoBehaviour
             if (hitEnemy && other.gameObject.GetComponent<EnemyAI>() != null)
             {
                 other.gameObject.GetComponent<EnemyAI>().Blowback(transform.position, m_fExplosiveForce);
-
-                Debug.Log("Push enemy");
+                
             }
             if (other.gameObject.GetComponent<PlayerMovement>() != null)
-            {
+            { 
+
                 other.gameObject.GetComponent<PlayerMovement>().BounceBack(transform.position, m_fExplosiveForce);
             }
             

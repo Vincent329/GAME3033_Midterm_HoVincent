@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform checkGroundRay;
     [SerializeField] private LayerMask GroundedLayers;
     [SerializeField] private Camera playerCamera;
-
+    [SerializeField] private AudioSource audioSource;
     [Header("States")]
     [SerializeField]
     private bool isActive = false;
@@ -50,6 +50,7 @@ public class PlayerMovement : MonoBehaviour
         playerInputControls = new PlayerInputControls();
         playerInput = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
         playerAnimController = GetComponent<Animator>();
         isGrounded = false;
     }
@@ -213,6 +214,7 @@ public class PlayerMovement : MonoBehaviour
         distToBlast.y = m_fVerticalBlowbackForce;
         Vector3 distToBlastNormalized = distToBlast.normalized;
         rb.AddForce(distToBlast * blowbackForce, ForceMode.Impulse);
+        audioSource.Play();
     }
 
     private void OnDrawGizmos()

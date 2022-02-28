@@ -74,6 +74,7 @@ public class GameManager : MonoBehaviour
     {
         totalEnemies--;
         UpdateTextCount(totalEnemies);
+        ScoreHolder.ScoreTrack = totalEnemies;
         if (totalEnemies <= 0)
         {
             GameSceneManager.Instance.LoadEndScene();

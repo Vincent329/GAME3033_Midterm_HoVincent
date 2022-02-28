@@ -19,6 +19,12 @@ public class WeaponScript : MonoBehaviour
         }
     }
 
+    AudioSource audioSource;
+
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -32,6 +38,7 @@ public class WeaponScript : MonoBehaviour
     /// <param name="obj"></param>
     public void FireWeapon(Transform locationOfSpawn)
     {
+        audioSource.Play();
         Instantiate(explosion, locationOfSpawn.position, locationOfSpawn.rotation);
     }
 }

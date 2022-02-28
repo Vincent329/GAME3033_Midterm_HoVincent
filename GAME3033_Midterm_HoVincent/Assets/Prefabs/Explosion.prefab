@@ -135,6 +135,7 @@ MonoBehaviour:
   hitEnemy: 0
   m_fExplosiveForce: 5
   renderComp: {fileID: 0}
+  audioClips: []
 --- !u!54 &7863030568244588117
 Rigidbody:
   m_ObjectHideFlags: 0
