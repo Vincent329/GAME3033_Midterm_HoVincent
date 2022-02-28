@@ -526,7 +526,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Credits:\n\nGame Designed and Programmed by \nVincent Ho\n\n101334300"
+  m_text: "Credits:\n\nGame Designed and Programmed by \nVincent Ho (101334300)\n\nBackground
+    from Vecteezy: <a href=\"https://www.vecteezy.com/free-vector/techno-background\">Techno
+    Background Vectors by Vecteezy</a>\n\nMusic by James Gargette: https://opengameart.org/content/echo-0\n\nSFX
+    by Little Robot Sound Factory: https://opengameart.org/content/sci-fi-sound-effects-library"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -553,7 +556,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 49.45
+  m_fontSize: 26.5
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

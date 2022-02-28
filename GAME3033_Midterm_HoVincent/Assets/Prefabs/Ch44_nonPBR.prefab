@@ -2250,6 +2250,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   playerCamera: {fileID: 0}
+  audioSource: {fileID: 0}
   isActive: 0
   pause: 0
   firing: 0
@@ -2481,7 +2482,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 275941888316676408e9788fba0cf996, type: 3}
+  m_audioClip: {fileID: 8300000, guid: cb07cce52774514428993310f8fa23c6, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
